@@ -1,9 +1,270 @@
 {% extends 'base.html' %}
 {% block body %}
 
-<header>
-  <h1>Babban Garage</h1>
-  <p>Namaste, {{ u.name }}</p>
+<style>
+  .garage-page {
+    --ink: #172340;
+    --muted: #5d6c85;
+    color: var(--ink);
+    background: linear-gradient(145deg, #edf4ff, #f8efff, #edfff8);
+    padding: 18px;
+    border-radius: 24px;
+  }
+
+  .garage-page * {
+    box-sizing: border-box;
+  }
+
+  .garage-page h1,
+  .garage-page h2,
+  .garage-page h3 {
+    color: var(--ink);
+  }
+
+  .garage-page h1 {
+    margin: 0;
+  }
+
+  .garage-page section {
+    margin-top: 24px;
+    scroll-margin-top: 16px;
+  }
+
+  .garage-panel {
+    padding: 22px;
+    background: rgba(255, 255, 255, 0.94);
+    border: 1px solid #ffffff;
+    border-radius: 22px;
+    box-shadow: 0 8px 0 #dce3f0, 0 16px 28px #25385b12;
+  }
+
+  .garage-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .garage-page nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 22px 0;
+  }
+
+  .garage-page nav a {
+    padding: 11px 15px;
+    color: #ffffff;
+    background: #304baf;
+    border-radius: 12px;
+    text-decoration: none;
+    box-shadow: 0 4px 0 #1b2e77;
+  }
+
+  .garage-page label {
+    display: block;
+    margin: 15px 0;
+    font-weight: 600;
+  }
+
+  .garage-page input:not([type="hidden"]),
+  .garage-page select,
+  .garage-page textarea {
+    display: block;
+    width: 100%;
+    margin-top: 7px;
+    padding: 13px;
+    color: #172340;
+    background: #ffffff;
+    border: 1px solid #b9c8e2;
+    border-radius: 12px;
+    font: inherit;
+  }
+
+  .garage-page input:focus,
+  .garage-page select:focus,
+  .garage-page textarea:focus {
+    outline: 3px solid #a9c7ff;
+    outline-offset: 2px;
+  }
+
+  .garage-page button {
+    padding: 12px 18px;
+    color: #ffffff;
+    background: #304baf;
+    border: 0;
+    border-radius: 12px;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 5px 0 #1b2e77;
+  }
+
+  .garage-page button:active {
+    transform: translateY(3px);
+    box-shadow: 0 2px 0 #1b2e77;
+  }
+
+  .garage-page button:focus-visible,
+  .garage-page a:focus-visible {
+    outline: 3px solid #f39b16;
+    outline-offset: 4px;
+  }
+
+  .garage-page .search-results {
+    max-height: 280px;
+    overflow-y: auto;
+    padding: 5px;
+  }
+
+  .garage-page .search-choice {
+    width: 100%;
+    text-align: left;
+    margin: 6px 0 10px;
+    color: #172340;
+    background: #e8efff;
+    box-shadow: 0 4px 0 #bacbeb;
+  }
+
+  .garage-page .selected-details {
+    margin: 18px 0;
+    padding: 16px;
+    background: #e7faef;
+    border: 1px solid #a6ddbc;
+    border-radius: 15px;
+  }
+
+  .garage-page .notice-box {
+    padding: 12px 16px;
+    background: #fff3cd;
+    color: #604700;
+    border-radius: 12px;
+    margin: 16px 0;
+  }
+
+  .garage-page .work-grid,
+  .garage-page .report-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 22px;
+    margin-top: 20px;
+  }
+
+  .garage-page .work-card {
+    --card-top: #eaf2ff;
+    --card-bottom: #ccddff;
+    --card-edge: #91afe2;
+    margin: 0;
+    padding: 22px;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    background: linear-gradient(145deg, var(--card-top), var(--card-bottom));
+    border: 1px solid #ffffff;
+    border-radius: 22px;
+    box-shadow:
+      inset 0 2px 0 #ffffffcc,
+      0 8px 0 var(--card-edge),
+      0 17px 24px #20325321;
+    transition: transform 0.18s ease;
+  }
+
+  .garage-page .work-card:nth-child(5n + 2) {
+    --card-top: #e6fff0;
+    --card-bottom: #bfead3;
+    --card-edge: #83b99d;
+  }
+
+  .garage-page .work-card:nth-child(5n + 3) {
+    --card-top: #fff3dc;
+    --card-bottom: #ffdb9b;
+    --card-edge: #d0ad6a;
+  }
+
+  .garage-page .work-card:nth-child(5n + 4) {
+    --card-top: #f5eaff;
+    --card-bottom: #dfc8fb;
+    --card-edge: #b196cf;
+  }
+
+  .garage-page .work-card:nth-child(5n + 5) {
+    --card-top: #ffeaf0;
+    --card-bottom: #fac8d5;
+    --card-edge: #cf98a8;
+  }
+
+  .garage-page .work-card:hover {
+    transform: translateY(-3px);
+  }
+
+  .garage-page .work-number {
+    display: inline-block;
+    padding: 7px 12px;
+    background: #ffffffb8;
+    border-radius: 10px;
+    font-weight: 700;
+  }
+
+  .garage-page .work-description {
+    margin-top: 15px;
+    padding: 14px;
+    border-radius: 13px;
+    background: #ffffffa8;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+
+  .garage-page .report-box {
+    padding: 18px;
+    background: #edf2ff;
+    border-radius: 16px;
+  }
+
+  .garage-page .customer-record {
+    padding: 16px;
+    margin-top: 14px;
+    border: 1px solid #dbe4f4;
+    border-radius: 15px;
+    background: #f7faff;
+  }
+
+  .garage-page [hidden] {
+    display: none !important;
+  }
+
+  @media (max-width: 520px) {
+    .garage-page {
+      padding: 10px;
+    }
+
+    .garage-panel {
+      padding: 16px;
+    }
+
+    .garage-page .work-grid,
+    .garage-page .report-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .garage-page .work-card {
+      transition: none;
+    }
+
+    .garage-page .work-card:hover {
+      transform: none;
+    }
+  }
+</style>
+
+<div class="garage-page">
+
+<header class="garage-header garage-panel">
+  <div>
+    <h1>Babban Garage</h1>
+    <p>Namaste, {{ u.name }}</p>
+  </div>
   <form method="post" action="/logout">
     <input type="hidden" name="csrf" value="{{ session.csrf }}">
     <button type="submit">Logout</button>
@@ -12,51 +273,49 @@
 
 {% with messages = get_flashed_messages() %}
   {% for message in messages %}
-    <p class="notice" role="status">{{ message }}</p>
+    <p class="notice-box" role="status">{{ message }}</p>
   {% endfor %}
 {% endwith %}
 
-<p class="notice">Starter version: abhi sirf test data use karein.</p>
+<p class="notice-box">Starter version: abhi sirf test data use karein.</p>
 
 {% if owner %}
 
 <nav>
-  <a href="#new-job">Job Card Banao</a>
-  <a href="#jobs">Job Cards</a>
+  <a href="#new-work">Work Card Banao</a>
+  <a href="#work-list">Work Cards Dekho</a>
   <a href="#customers">Customer Add Karo</a>
   <a href="#vehicles">Gaadi Add Karo</a>
   <a href="#reports">Hisaab</a>
 </nav>
 
-<section id="new-job">
-  <h2>Naya Job Card Banao</h2>
+<section id="new-work" class="garage-panel">
+  <h2>Naya Work Card Banao</h2>
 
   {% if d.vehicles %}
-  <form id="job-form" method="post" action="/add/job">
+  <form id="work-form" method="post" action="/add/job">
     <input type="hidden" name="csrf" value="{{ session.csrf }}">
-    <input id="job-vehicle-id" type="hidden" name="vehicle_id">
+    <input id="work-vehicle-id" type="hidden" name="vehicle_id">
 
     <label>
-      Naam ya Gaadi Number Search Karo
-      <input id="job-vehicle-search" type="search"
-             placeholder="Naam, gaadi number ya mobile"
+      Customer ka Naam ya Gaadi Number
+      <input id="work-search" type="search"
+             placeholder="Naam, gaadi number ya mobile likho"
              autocomplete="off">
     </label>
 
-    <p>Matching gaadi par tap karo.</p>
+    <p>Search karke sahi gaadi par tap karo.</p>
 
-    <div id="job-vehicle-results"
-         style="max-height:260px; overflow-y:auto;" hidden>
+    <div id="work-results" class="search-results" hidden>
       {% for vehicle in d.vehicles %}
         {% for customer in d.customers %}
           {% if customer.id == vehicle.customer_id %}
-          <button type="button" class="job-vehicle-choice"
+          <button type="button" class="search-choice work-choice"
                   data-id="{{ vehicle.id }}"
                   data-name="{{ customer.name }}"
                   data-phone="{{ customer.phone }}"
                   data-registration="{{ vehicle.registration }}"
-                  data-model="{{ vehicle.model }}"
-                  style="width:100%;text-align:left;margin:6px 0;">
+                  data-model="{{ vehicle.model }}">
             {{ customer.name }} — {{ vehicle.registration }}
             — {{ vehicle.model }} — {{ customer.phone }}
           </button>
@@ -65,31 +324,82 @@
       {% endfor %}
     </div>
 
-    <p id="job-vehicle-empty" hidden>Koi matching gaadi nahi mili.</p>
+    <p id="work-empty" hidden>Koi matching gaadi nahi mili.</p>
 
-    <div id="job-vehicle-selected" aria-live="polite" hidden>
-      <h3>Chuni Hui Gaadi</h3>
-      <p>Customer: <span id="job-name"></span></p>
-      <p>Mobile: <span id="job-phone"></span></p>
-      <p>Gaadi Number: <span id="job-registration"></span></p>
-      <p>Model: <span id="job-model"></span></p>
+    <div id="work-selected" class="selected-details"
+         aria-live="polite" hidden>
+      <h3>Work Card ki Details</h3>
+      <p>Customer: <span id="work-name"></span></p>
+      <p>Mobile: <span id="work-phone"></span></p>
+      <p>Gaadi Number: <span id="work-registration"></span></p>
+      <p>Model: <span id="work-model"></span></p>
       <p>Date: Save hote waqt aaj ki server date lagegi.</p>
     </div>
 
     <label>
-      Problem / Karne Wala Kaam
+      Work kya karwana hai?
       <textarea name="problem" rows="4"
-                placeholder="Gaadi mein kya problem hai?" required></textarea>
+                placeholder="Yahan karwane wala kaam likho"
+                required></textarea>
     </label>
 
-    <button type="submit">Job Card Banao</button>
+    <button type="submit">Work Card Banao</button>
   </form>
   {% else %}
-    <p>Pehle customer ki gaadi add karo.</p>
+    <p>Pehle customer aur uski gaadi add karo.</p>
   {% endif %}
 </section>
 
-<section id="customers">
+{% else %}
+
+<section class="garage-panel">
+  <h2>Staff Dashboard</h2>
+  <p>Neeche tumhe assign kiye hue work cards hain.</p>
+</section>
+
+{% endif %}
+
+<section id="work-list" class="garage-panel">
+  <h2>Work Cards</h2>
+
+  <label>
+    Work Search Karo
+    <input id="work-list-search" type="search"
+           placeholder="Naam, gaadi number ya work likho">
+  </label>
+
+  <div class="work-grid">
+    {% for job in jobs %}
+    <article class="work-card">
+      <span class="work-number">Work Card #{{ job.id }}</span>
+
+      {% if owner %}
+        {% for vehicle in d.vehicles %}
+          {% if vehicle.id == job.vehicle_id %}
+            {% for customer in d.customers %}
+              {% if customer.id == vehicle.customer_id %}
+                <h3>{{ customer.name }}</h3>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+
+      <p>Gaadi Number: {{ job.registration }}</p>
+      <p>Date: {{ job.created|day }}</p>
+
+      <div class="work-description">Work kya karwana hai?
+{{ job.problem }}</div>
+    </article>
+    {% else %}
+      <p>Abhi koi work card nahi hai.</p>
+    {% endfor %}
+  </div>
+</section>
+
+{% if owner %}
+
+<section id="customers" class="garage-panel">
   <h2>Naya Customer Add Karo</h2>
   <form method="post" action="/add/customer">
     <input type="hidden" name="csrf" value="{{ session.csrf }}">
@@ -109,44 +419,42 @@
   </form>
 </section>
 
-<section id="vehicles">
+<section id="vehicles" class="garage-panel">
   <h2>Customer ki Gaadi Add Karo</h2>
 
   {% if d.customers %}
   <form id="vehicle-form" method="post" action="/add/vehicle">
     <input type="hidden" name="csrf" value="{{ session.csrf }}">
-    <input id="vehicle-customer-id" type="hidden" name="customer_id">
+    <input id="customer-id" type="hidden" name="customer_id">
 
     <label>
       Customer Search Karo
-      <input id="vehicle-customer-search" type="search"
-             placeholder="Customer ka naam ya mobile number"
+      <input id="customer-picker-search" type="search"
+             placeholder="Customer ka naam ya mobile"
              autocomplete="off">
     </label>
 
-    <p>Search karke sahi customer par tap karo.</p>
+    <p>Matching customer par tap karo.</p>
 
-    <div id="vehicle-customer-results"
-         style="max-height:260px;overflow-y:auto;" hidden>
+    <div id="customer-results" class="search-results" hidden>
       {% for customer in d.customers %}
-      <button type="button" class="vehicle-customer-choice"
+      <button type="button" class="search-choice customer-choice"
               data-id="{{ customer.id }}"
               data-name="{{ customer.name }}"
-              data-phone="{{ customer.phone }}"
-              style="width:100%;text-align:left;margin:6px 0;">
+              data-phone="{{ customer.phone }}">
         {{ customer.name }} — {{ customer.phone }}
       </button>
       {% endfor %}
     </div>
 
-    <p id="vehicle-customer-empty" hidden>
+    <p id="customer-empty" hidden>
       Customer nahi mila. Naam/mobile check karo ya naya customer add karo.
     </p>
 
-    <div id="vehicle-customer-selected" aria-live="polite" hidden>
-      <h3>Chuna Hua Customer</h3>
-      <p>Naam: <span id="vehicle-customer-name"></span></p>
-      <p>Mobile: <span id="vehicle-customer-phone"></span></p>
+    <div id="customer-selected" class="selected-details"
+         aria-live="polite" hidden>
+      <p>Customer: <span id="picked-name"></span></p>
+      <p>Mobile: <span id="picked-phone"></span></p>
     </div>
 
     <label>
@@ -157,7 +465,6 @@
       Gaadi ka Model
       <input type="text" name="model" required>
     </label>
-
     <button type="submit">Gaadi Add Karo</button>
   </form>
   {% else %}
@@ -165,11 +472,13 @@
   {% endif %}
 </section>
 
-<section>
+<section class="garage-panel">
   <h2>Customers aur Unki Gaadiyan</h2>
-  <input id="customer-search" type="search"
-         aria-label="Customer list search"
-         placeholder="Naam, mobile ya gaadi number">
+  <label>
+    Customer Search
+    <input id="customer-list-search" type="search"
+           placeholder="Naam, mobile ya gaadi number">
+  </label>
 
   {% for customer in d.customers %}
   <article class="customer-record">
@@ -191,66 +500,32 @@
   {% endfor %}
 </section>
 
-<section id="reports">
+<section id="reports" class="garage-panel">
   <h2>Aaj ka Hisaab</h2>
-  <div class="grid">
-    <article>
+  <div class="report-grid">
+    <article class="report-box">
       <p>Aaj ki Billing</p><h3>₹{{ d.billing|inr }}</h3>
     </article>
-    <article>
+    <article class="report-box">
       <p>Aaj Paisa Mila</p><h3>₹{{ d.collected|inr }}</h3>
     </article>
-    <article>
+    <article class="report-box">
       <p>Aaj ka Kharcha</p><h3>₹{{ d.spent|inr }}</h3>
     </article>
-    <article>
+    <article class="report-box">
       <p>Customers se Lena Baaki</p><h3>₹{{ d.due|inr }}</h3>
     </article>
   </div>
 </section>
 
-{% else %}
-  <h2>Staff Dashboard</h2>
-  <p>Neeche tumhe assign kiye hue kaam hain.</p>
-{% endif %}
-
-<section id="jobs">
-  <h2>Job Cards</h2>
-  <input id="job-search" type="search"
-         aria-label="Job card search"
-         placeholder="Naam, gaadi number ya problem">
-
-  {% for job in jobs %}
-  <article class="job-record">
-    <h3>Job Card #{{ job.id }}</h3>
-
-    {% if owner %}
-      {% for vehicle in d.vehicles %}
-        {% if vehicle.id == job.vehicle_id %}
-          {% for customer in d.customers %}
-            {% if customer.id == vehicle.customer_id %}
-              <p>Customer: {{ customer.name }}</p>
-            {% endif %}
-          {% endfor %}
-        {% endif %}
-      {% endfor %}
-    {% endif %}
-
-    <p>Gaadi Number: {{ job.registration }}</p>
-    <p>Date: {{ job.created|day }}</p>
-    <p>Problem: {{ job.problem }}</p>
-  </article>
-  {% else %}
-    <p>Abhi koi job card nahi hai.</p>
-  {% endfor %}
-</section>
-
-{% if owner %}
-<p>
+<p class="notice-box">
   Billing, payment, kharcha, staff management aur stock ke forms
   abhi is page mein shamil nahi hain.
 </p>
+
 {% endif %}
+
+</div>
 
 <script>
 (function () {
@@ -293,7 +568,6 @@
         var match = query !== "" &&
           norm(button.textContent).includes(query);
         button.hidden = !match;
-        button.style.display = match ? "block" : "none";
         if (match) count++;
       });
 
@@ -328,39 +602,39 @@
     });
   }
 
-  listSearch("customer-search", ".customer-record");
-  listSearch("job-search", ".job-record");
+  listSearch("customer-list-search", ".customer-record");
+  listSearch("work-list-search", ".work-card");
 
   picker({
     form: "vehicle-form",
-    search: "vehicle-customer-search",
-    id: "vehicle-customer-id",
-    results: "vehicle-customer-results",
-    empty: "vehicle-customer-empty",
-    selected: "vehicle-customer-selected",
-    choices: ".vehicle-customer-choice",
+    search: "customer-picker-search",
+    id: "customer-id",
+    results: "customer-results",
+    empty: "customer-empty",
+    selected: "customer-selected",
+    choices: ".customer-choice",
     fields: {
-      name: "vehicle-customer-name",
-      phone: "vehicle-customer-phone"
+      name: "picked-name",
+      phone: "picked-phone"
     },
     error: "Pehle customer search karke uske naam par tap karo."
   });
 
   picker({
-    form: "job-form",
-    search: "job-vehicle-search",
-    id: "job-vehicle-id",
-    results: "job-vehicle-results",
-    empty: "job-vehicle-empty",
-    selected: "job-vehicle-selected",
-    choices: ".job-vehicle-choice",
+    form: "work-form",
+    search: "work-search",
+    id: "work-vehicle-id",
+    results: "work-results",
+    empty: "work-empty",
+    selected: "work-selected",
+    choices: ".work-choice",
     fields: {
-      name: "job-name",
-      phone: "job-phone",
-      registration: "job-registration",
-      model: "job-model"
+      name: "work-name",
+      phone: "work-phone",
+      registration: "work-registration",
+      model: "work-model"
     },
-    error: "Pehle naam ya gaadi number search karke sahi gaadi par tap karo."
+    error: "Naam ya gaadi number search karke sahi gaadi par tap karo."
   });
 })();
 </script>
