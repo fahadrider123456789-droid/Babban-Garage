@@ -7,14 +7,16 @@
   <p>Namaste, {{ u.name }}</p>
 
   <form method="post" action="/logout">
-    <input
-      type="hidden"
-      name="csrf"
-      value="{{ session.csrf }}"
-    >
+    <input type="hidden" name="csrf" value="{{ session.csrf }}">
     <button type="submit">Logout</button>
   </form>
 </header>
+
+{% with messages = get_flashed_messages() %}
+  {% for message in messages %}
+    <p class="notice" role="status">{{ message }}</p>
+  {% endfor %}
+{% endwith %}
 
 <p class="notice">
   Starter version: sirf test data use karein.
@@ -25,9 +27,11 @@
 {% if owner %}
 
 <nav>
-  <a href="#reports">Aaj ka Hisaab</a>
-  <a href="#customers">Customers</a>
+  <a href="#reports">Hisaab</a>
+  <a href="#customers">Customer Add Karo</a>
   <a href="#vehicles">Gaadi Add Karo</a>
+  <a href="#new-job">Job Card Banao</a>
+  <a href="#jobs">Kaam ki List</a>
 </nav>
 
 <section id="reports">
@@ -67,11 +71,7 @@
   <h2>Naya Customer Add Karo</h2>
 
   <form method="post" action="/add/customer">
-    <input
-      type="hidden"
-      name="csrf"
-      value="{{ session.csrf }}"
-    >
+    <input type="hidden" name="csrf" value="{{ session.csrf }}">
 
     <label>
       Customer ka Naam
@@ -96,17 +96,12 @@
   <h2>Customer ki Gaadi Add Karo</h2>
 
   <form method="post" action="/add/vehicle">
-    <input
-      type="hidden"
-      name="csrf"
-      value="{{ session.csrf }}"
-    >
+    <input type="hidden" name="csrf" value="{{ session.csrf }}">
 
     <label>
       Customer chuno
       <select name="customer_id" required>
         <option value="">Customer select karo</option>
-
         {% for customer in d.customers %}
           <option value="{{ customer.id }}">
             {{ customer.name }} — {{ customer.phone }}
@@ -164,8 +159,7 @@
         {% for vehicle in d.vehicles %}
           {% if vehicle.customer_id == customer.id %}
             <li>
-              {{ vehicle.registration }}
-              — {{ vehicle.model }}
+              {{ vehicle.registration }} — {{ vehicle.model }}
             </li>
           {% endif %}
         {% endfor %}
@@ -176,46 +170,175 @@
   {% endfor %}
 </section>
 
-<section>
-  <h2>Baaki Features</h2>
-  <p>
-    Jobs, billing, payment, kharcha, staff management
-    aur stock ke forms abhi is page mein shamil nahi hain.
-  </p>
+<section id="new-job">
+  <h2>Naya Job Card Banao</h2>
+
+  {% if d.vehicles %}
+
+    <form method="post" action="/add/job">
+      <input type="hidden" name="csrf" value="{{ session.csrf }}">
+
+      <label>
+        Gaadi chuno
+        <select name="vehicle_id" required>
+          <option value="">Gaadi select karo</option>
+
+          {% for vehicle in d.vehicles %}
+            <option value="{{ vehicle.id }}">
+              {{ vehicle.registration }} — {{ vehicle.model }}
+              {% for customer in d.customers %}
+                {% if customer.id == vehicle.customer_id %}
+                  — {{ customer.name }}
+                {% endif %}
+              {% endfor %}
+            </option>
+          {% endfor %}
+        </select>
+      </label>
+
+      <label>
+        Customer ki Complaint / Karne Wala Kaam
+        <textarea
+          name="problem"
+          rows="4"
+          placeholder="Jaise: brake se awaaz, oil change, general service"
+          required
+        ></textarea>
+      </label>
+
+      <label>
+        Mechanic — optional
+        <select name="mechanic_id">
+          <option value="">Abhi mechanic assign nahi karna</option>
+
+          {% for staff in d.users %}
+            {% if staff.role == 'staff' and staff.active %}
+              <option value="{{ staff.id }}">
+                {{ staff.name }}
+              </option>
+            {% endif %}
+          {% endfor %}
+        </select>
+      </label>
+
+      <button type="submit">Job Card Banao</button>
+    </form>
+
+  {% else %}
+
+    <p>Job card banane se pehle customer ki gaadi add karo.</p>
+
+  {% endif %}
 </section>
-
-<script>
-  (function () {
-    var search = document.getElementById("customer-search");
-
-    if (!search) {
-      return;
-    }
-
-    search.addEventListener("input", function () {
-      var query = search.value.toLowerCase().trim();
-      var records = document.querySelectorAll(".customer-record");
-
-      records.forEach(function (record) {
-        record.hidden = !record.textContent
-          .toLowerCase()
-          .includes(query);
-      });
-    });
-  })();
-</script>
 
 {% else %}
 
 <section>
   <h2>Staff Dashboard</h2>
-  <p>Namaste, {{ u.name }}.</p>
-  <p>
-    Staff ke kaam wale features abhi is page mein
-    shamil nahi hain.
-  </p>
+  <p>Neeche tumhe assign kiye hue kaam hain.</p>
 </section>
 
 {% endif %}
+
+<section id="jobs">
+  <h2>Kaam ki List / Job Cards</h2>
+
+  <label>
+    Job Card Search
+    <input
+      id="job-search"
+      type="search"
+      placeholder="Job number, gaadi, problem ya status"
+    >
+  </label>
+
+  {% for job in jobs %}
+    <article class="job-record">
+      <h3>Job Card #{{ job.id }}</h3>
+
+      <p>Gaadi: {{ job.registration }}</p>
+      <p>Date: {{ job.created|day }}</p>
+      <p>Complaint / Kaam: {{ job.problem }}</p>
+      <p>Mechanic: {{ job.mechanic or 'Abhi assign nahi hua' }}</p>
+      <p>Status: {{ job.status }}</p>
+
+      {% if owner %}
+
+        <form method="post" action="/add/status">
+          <input
+            type="hidden"
+            name="csrf"
+            value="{{ session.csrf }}"
+          >
+          <input type="hidden" name="job_id" value="{{ job.id }}">
+
+          <label>
+            Kaam ka Status Badlo
+            <select name="status" required>
+              {% for status in [
+                'Naya',
+                'Checking',
+                'Kaam Chal Raha Hai',
+                'Parts Ka Intezaar',
+                'Ready',
+                'Delivered',
+                'Cancelled'
+              ] %}
+                <option
+                  value="{{ status }}"
+                  {% if job.status == status %}selected{% endif %}
+                >
+                  {{ status }}
+                </option>
+              {% endfor %}
+            </select>
+          </label>
+
+          <button type="submit">Status Save Karo</button>
+        </form>
+
+      {% endif %}
+    </article>
+  {% else %}
+    <p>Abhi koi job card nahi hai.</p>
+  {% endfor %}
+</section>
+
+{% if owner %}
+  <section>
+    <h2>Baaki Features</h2>
+    <p>
+      Billing, payment, kharcha, staff management
+      aur stock ke forms abhi is page mein shamil nahi hain.
+      Is basic job card mein KM reading, estimate,
+      parts/labour detail aur customer approval abhi nahi hain.
+    </p>
+  </section>
+{% endif %}
+
+<script>
+  (function () {
+    function setupSearch(inputId, recordSelector) {
+      var input = document.getElementById(inputId);
+
+      if (!input) {
+        return;
+      }
+
+      input.addEventListener("input", function () {
+        var query = input.value.toLowerCase().trim();
+
+        document.querySelectorAll(recordSelector).forEach(function (record) {
+          record.hidden = !record.textContent
+            .toLowerCase()
+            .includes(query);
+        });
+      });
+    }
+
+    setupSearch("customer-search", ".customer-record");
+    setupSearch("job-search", ".job-record");
+  })();
+</script>
 
 {% endblock %}
