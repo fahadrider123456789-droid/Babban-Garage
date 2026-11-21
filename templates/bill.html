@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<nav>
+  <a href="/">Dashboard par wapas</a>
+</nav>
+
+<section>
+  <h1>Babban Garrage</h1>
+  <h2>Non-GST Bill</h2>
+
+  <p>
+    Bill No:
+    BG-{{ '%06d'|format(b.id) }}
+  </p>
+
+  <p>Date: {{ b.created|day }}</p>
+
+  <hr>
+
+  <h3>Customer Details</h3>
+
+  <p>Naam: {{ b.name }}</p>
+  <p>Mobile: {{ b.phone }}</p>
+
+  <p>
+    Job Card:
+    {% if b.job_id %}
+      BG-J-{{ '%06d'|format(b.job_id) }}
+    {% else %}
+      Direct Bill
+    {% endif %}
+  </p>
+
+  <hr>
+
+  <h3>Kaam / Parts ka Description</h3>
+
+  <p style="white-space: pre-wrap;">{{ b.description }}</p>
+
+  <div class="scroll">
+    <table>
+      <tbody>
+        <tr>
+          <th>Total Amount</th>
+          <td>₹{{ b.total|inr }}</td>
+        </tr>
+
+        <tr>
+          <th>Paisa Mila</th>
+          <td>₹{{ paid|inr }}</td>
+        </tr>
+
+        <tr>
+          <th>Baaki Amount</th>
+          <td>₹{{ (b.total - paid)|inr }}</td>
+        </tr>
+
+        <tr>
+          <th>Payment Status</th>
+          <td>
+            {% if paid == b.total %}
+              Paid
+            {% elif paid > 0 %}
+              Partially Paid
+            {% else %}
+              Unpaid
+            {% endif %}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>
+    <small>
+      Yeh non-GST bill hai. Is starter version mein
+      GST calculation shamil nahi hai.
+    </small>
+  </p>
+</section>
+
+<section>
+  <h2>Payment Receipts</h2>
+
+  {% for payment in p %}
+    <article>
+      <h3>Babban Garrage</h3>
+      <p>Payment Receipt</p>
+
+      <p>
+        Receipt No:
+        BG-R-{{ '%06d'|format(payment.id) }}
+      </p>
+
+      <p>
+        Bill No:
+        BG-{{ '%06d'|format(b.id) }}
+      </
