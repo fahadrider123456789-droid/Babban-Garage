@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<section>
+  <h1>Babban Garrage</h1>
+  <h2>Apne account mein login karo</h2>
+
+  <form method="post" action="/login">
+    <input
+      type="hidden"
+      name="csrf"
+      value="{{ session.csrf }}"
+    >
+
+    <label for="username">Username</label>
+    <input
+      id="username"
+      name="username"
+      type="text"
+      autocomplete="username"
+      autocapitalize="none"
+      spellcheck="false"
+      placeholder="Apna username likho"
+      required
+    >
+
+    <label for="password">Password</label>
+    <input
+      id="password"
+      name="password"
+      type="password"
+      autocomplete="current-password"
+      placeholder="Apna password likho"
+      required
+    >
+
+    <label
+      style="
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 12px 0;
+      "
+    >
+      <input
+        type="checkbox"
+        style="width: auto; min-width: 20px;"
+        onchange="
+          document.getElementById('password').type =
+            this.checked ? 'text' : 'password'
+        "
+      >
+      Password dikhao
+    </label>
+
+    <button type="submit">Login Karo</button>
+  </form>
+
+  <p>
+    <small>
+      Owner aur staff apne-apne account se login karein.
+      Staff ka account owner banayega.
+    </small>
+  </p>
+</section>
+{% endblock %}
