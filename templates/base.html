@@ -4,112 +4,484 @@
   <meta charset="utf-8">
   <meta name="viewport"
         content="width=device-width, initial-scale=1">
-  <title>Babban Garrage</title>
+  <meta name="theme-color" content="#171717">
+
+  <title>Babban Garage</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Manrope:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
 
   <style>
-    * { box-sizing: border-box; }
+    :root {
+      color-scheme: light;
+      --paper: #f3f2ee;
+      --surface: #ffffff;
+      --ink: #1b1b1b;
+      --muted: #666761;
+      --line: #deded7;
+      --red: #c72c30;
+      --body-font: "Manrope", "Segoe UI", Arial, sans-serif;
+      --display-font: "DotGothic16", monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
 
     body {
       margin: 0;
-      background: #f3f6fa;
-      color: #172c48;
-      font: 17px system-ui, sans-serif;
-      line-height: 1.5;
-    }
-
-    header {
-      padding: 18px;
-      background: #172c48;
-      color: white;
-      font-size: 24px;
-      font-weight: bold;
+      color: var(--ink);
+      background-color: var(--paper);
+      background-image:
+        radial-gradient(#20202013 0.8px, transparent 0.8px);
+      background-size: 12px 12px;
+      font-family: var(--body-font);
+      font-size: 15px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
     }
 
     main {
-      max-width: 1000px;
-      margin: auto;
-      padding: 14px;
+      width: min(1180px, 100%);
+      margin: 0 auto;
+      padding: 24px 18px 60px;
     }
 
-    section, article {
-      background: white;
-      margin: 14px 0;
-      padding: 16px;
-      border-radius: 12px;
-      overflow-wrap: anywhere;
+    h1, h2, h3 {
+      color: var(--ink);
+      line-height: 1.3;
     }
 
-    label { display: block; }
+    a {
+      color: var(--red);
+    }
+
+    label {
+      display: block;
+      margin: 16px 0;
+      font-weight: 700;
+    }
 
     input, select, textarea, button {
-      width: 100%;
-      margin: 7px 0;
-      padding: 13px;
-      border: 1px solid #bbc6d3;
-      border-radius: 8px;
       font: inherit;
+      box-sizing: border-box;
     }
 
-    textarea { min-height: 100px; }
+    input:not([type="hidden"]), select, textarea {
+      display: block;
+      width: 100%;
+      margin: 8px 0;
+      padding: 14px;
+      color: var(--ink);
+      background: #fafaf7;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: 3px solid #c72c301c;
+      border-color: var(--red);
+      background: white;
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
 
     button {
-      background: #e46b16;
+      padding: 13px 20px;
       color: white;
+      background: var(--ink);
       border: 0;
-      font-weight: bold;
+      border-radius: 12px;
       cursor: pointer;
+      font-weight: 800;
     }
 
-    a { color: #1358a0; }
-
-    nav {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin: 12px 0;
-    }
-
-    nav a {
-      padding: 10px;
-      background: white;
-      border-radius: 8px;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns:
-        repeat(auto-fit, minmax(160px, 1fr));
-      gap: 10px;
+    button:focus-visible, a:focus-visible {
+      outline: 3px solid #dc5d5d;
+      outline-offset: 4px;
     }
 
     .notice {
-      padding: 12px;
-      background: #fff1d5;
-      border-radius: 8px;
+      padding: 13px 17px;
+      background: #fff2d9;
+      color: #624b1f;
+      border: 1px solid #ead9b7;
+      border-radius: 12px;
     }
 
-    .scroll { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; }
-    td, th { padding: 10px; text-align: left; }
-    small { color: #526477; }
-    [hidden] { display: none !important; }
+    .scroll {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    /* Dashboard appearance */
+    .garage {
+      font-family: var(--body-font) !important;
+      color: var(--ink) !important;
+      background: transparent !important;
+      padding: 0 !important;
+      border-radius: 0 !important;
+    }
+
+    .garage h1,
+    .garage h2 {
+      font-family: var(--display-font) !important;
+      font-weight: 400 !important;
+      letter-spacing: 0.3px !important;
+    }
+
+    .garage h2 {
+      color: var(--ink) !important;
+      font-size: clamp(23px, 4vw, 31px) !important;
+      margin-bottom: 10px !important;
+    }
+
+    .garage h3 {
+      font-family: var(--body-font) !important;
+      color: var(--ink) !important;
+      font-weight: 800 !important;
+      letter-spacing: -0.6px !important;
+    }
+
+    .garage .muted {
+      color: var(--muted) !important;
+    }
+
+    .garage .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 32px !important;
+      background: #191919 !important;
+      border: 1px solid #353535 !important;
+      border-radius: 24px !important;
+      box-shadow: 0 7px 0 #d2d1cb,
+                  0 20px 35px #17171713 !important;
+    }
+
+    .garage .hero::after {
+      content: "";
+      position: absolute;
+      top: 17px;
+      right: 18px;
+      width: 44px;
+      height: 7px;
+      background: var(--red);
+      border-radius: 10px;
+    }
+
+    .garage .hero h1 {
+      color: #f7f6ef !important;
+      font-size: clamp(30px, 6vw, 46px) !important;
+    }
+
+    .garage .hero p {
+      color: #d2d2c9 !important;
+    }
+
+    .garage .eyebrow {
+      font-family: var(--body-font) !important;
+      font-size: 10px !important;
+      letter-spacing: 2.2px !important;
+      font-weight: 800 !important;
+    }
+
+    .garage .hero .eyebrow {
+      color: #e0b0b0 !important;
+    }
+
+    .garage .logout {
+      background: #ffffff0c !important;
+      border: 1px solid #66665f !important;
+      color: #fff !important;
+      box-shadow: none !important;
+      border-radius: 999px !important;
+    }
+
+    .garage .nav {
+      padding: 23px 2px !important;
+      gap: 9px !important;
+      scrollbar-width: thin;
+    }
+
+    .garage .nav a {
+      color: #292925 !important;
+      background: #ffffffb8 !important;
+      border: 1px solid #d8d8d0 !important;
+      border-radius: 999px !important;
+      padding: 11px 19px !important;
+      font-size: 13px !important;
+      box-shadow: 0 2px 0 #deded7;
+    }
+
+    .garage .nav a:first-child {
+      color: white !important;
+      background: var(--ink) !important;
+      border-color: var(--ink) !important;
+    }
+
+    .garage .panel {
+      background: #fffffff5 !important;
+      border: 1px solid #deded7 !important;
+      border-radius: 22px !important;
+      padding: 27px !important;
+      margin-bottom: 24px !important;
+      box-shadow: 0 4px 0 #e5e4de,
+                  0 12px 28px #19191904 !important;
+    }
+
+    .garage .panel-header {
+      padding-bottom: 16px;
+      border-bottom: 1px dashed #d9d9d0;
+    }
+
+    .garage input:not([type="hidden"]),
+    .garage textarea {
+      font-family: var(--body-font) !important;
+      background: #f7f7f3 !important;
+      color: var(--ink) !important;
+      border: 1px solid #dcdcd4 !important;
+      border-radius: 12px !important;
+      padding: 15px !important;
+      font-size: 16px !important;
+    }
+
+    .garage input::placeholder,
+    .garage textarea::placeholder {
+      color: #74756d !important;
+    }
+
+    .garage input:focus,
+    .garage textarea:focus {
+      border-color: #a24747 !important;
+      outline: 3px solid #c72c3017 !important;
+      background: white !important;
+    }
+
+    .garage button {
+      font-family: var(--body-font) !important;
+      color: white !important;
+      background: var(--ink) !important;
+      border-radius: 12px !important;
+      box-shadow: 0 3px 0 #00000020 !important;
+      font-size: 14px !important;
+      font-weight: 800 !important;
+      transition: transform 0.15s ease,
+                  background 0.15s ease;
+    }
+
+    .garage .submit {
+      background: var(--red) !important;
+      padding: 16px !important;
+      border-radius: 999px !important;
+      box-shadow: 0 4px 0 #942024 !important;
+    }
+
+    .garage button:active {
+      transform: translateY(2px);
+    }
+
+    .garage .choice {
+      background: #f3f3ed !important;
+      color: var(--ink) !important;
+      border: 1px solid #dcdcd3 !important;
+      box-shadow: none !important;
+      padding: 15px !important;
+      line-height: 1.65;
+      overflow-wrap: anywhere;
+    }
+
+    .garage .choice:hover {
+      background: #eaeae2 !important;
+    }
+
+    .garage .details {
+      background: #f0f2e9 !important;
+      border: 1px solid #d6ddc9 !important;
+      border-left: 4px solid #7b885d !important;
+      border-radius: 13px !important;
+    }
+
+    .garage .work-grid {
+      gap: 23px !important;
+      padding-bottom: 7px;
+    }
+
+    .garage .work-card {
+      --sheet: #edf1e5;
+      --edge: #cbd3bc;
+      background: linear-gradient(135deg, #fff, var(--sheet)) !important;
+      border: 1px solid #ffffff !important;
+      border-radius: 18px !important;
+      padding: 23px !important;
+      box-shadow: 0 6px 0 var(--edge),
+                  0 14px 25px #2020200d !important;
+      position: relative;
+    }
+
+    .garage .work-card:nth-child(4n+2) {
+      --sheet: #e9edf5;
+      --edge: #c2ccdc;
+    }
+
+    .garage .work-card:nth-child(4n+3) {
+      --sheet: #f6eddf;
+      --edge: #dfceb5;
+    }
+
+    .garage .work-card:nth-child(4n+4) {
+      --sheet: #f1e8ee;
+      --edge: #d9c4d1;
+    }
+
+    .garage .card-top {
+      font-family: var(--body-font) !important;
+      color: #56574f;
+      padding-bottom: 14px;
+      border-bottom: 1px dashed #74746a4d;
+    }
+
+    .garage .card-number {
+      background: #191919 !important;
+      color: white !important;
+      font-family: var(--display-font) !important;
+      font-weight: 400 !important;
+      letter-spacing: 0.7px;
+      border-radius: 7px !important;
+      padding: 6px 10px !important;
+    }
+
+    .garage .registration {
+      font-family: var(--body-font) !important;
+      color: #262620 !important;
+      background: #ffffffb8 !important;
+      border: 1px solid #a5a79a !important;
+      border-radius: 6px !important;
+      font-size: 14px !important;
+      letter-spacing: 1px !important;
+      padding: 7px 11px !important;
+    }
+
+    .garage .work-text {
+      border-top: 1px dashed #94958866 !important;
+    }
+
+    .garage .work-text p {
+      font-size: 16px;
+      line-height: 1.8;
+    }
+
+    .garage .record {
+      background: #f8f8f4 !important;
+      border: 1px solid #e0e0d8 !important;
+      border-radius: 14px !important;
+      padding: 19px !important;
+    }
+
+    .garage .phone-boxes {
+      gap: 5px !important;
+    }
+
+    .garage .phone-boxes input {
+      padding: 12px 0 !important;
+      text-align: center !important;
+      border-radius: 8px !important;
+      font-family: var(--body-font) !important;
+      font-size: 19px !important;
+      font-weight: 800 !important;
+      box-shadow: 0 3px 0 #dfdfd6;
+    }
+
+    .garage .notice {
+      background: #f5efde !important;
+      color: #675329 !important;
+      border: 1px solid #e7dcc0 !important;
+    }
+
+    @media (max-width: 480px) {
+      main {
+        padding: 13px 11px 40px;
+      }
+
+      .garage .hero {
+        padding: 26px 20px !important;
+      }
+
+      .garage .panel {
+        padding: 20px 16px !important;
+        border-radius: 18px !important;
+      }
+
+      .garage .phone-boxes {
+        gap: 3px !important;
+      }
+
+      .garage .phone-boxes input {
+        font-size: 17px !important;
+        padding: 11px 0 !important;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      .garage button {
+        transition: none;
+      }
+    }
 
     @media print {
-      button, nav, .notice { display: none !important; }
-      body { background: white; }
-      header { background: white; color: black; }
+      body {
+        background: white;
+      }
+
+      main {
+        max-width: none;
+        padding: 0;
+      }
+
+      button, nav, .notice {
+        display: none !important;
+      }
+
+      .garage .work-card {
+        break-inside: avoid;
+        box-shadow: none !important;
+        border: 1px solid #999 !important;
+      }
     }
   </style>
 </head>
 
 <body>
-  <header>Babban Garrage</header>
-
   <main>
-    {% for msg in get_flashed_messages() %}
-      <p class="notice" role="status">{{ msg }}</p>
-    {% endfor %}
-
     {% block body %}
     {% endblock %}
   </main>
