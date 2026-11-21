@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+
+{% macro start_form(path) %}
+<form method="post" action="/add/{{ path }}">
+  <input
+    type="hidden"
+    name="csrf"
+    value="{{ session.csrf }}"
+  >
+{% endmacro %}
+
+{% macro field(name, label, type='text') %}
+<label>
+  {{ label }}
+  <input
+    name="{{ name }}"
+    type="{{ type }}"
+    required
+    {% if type == 'number' %}
+      min="0.01"
+      step="0.01"
+    {% endif %}
+  >
+</label>
+{% endmacro %}
+
+{% macro staff_select() %}
+<label>
+  Staff chuno
+  <select name="user_id" required>
+    <option value="">Staff select karo</option>
+    {% for staff in d.users if staff.role == 'staff' %}
+      <option value="{{ staff.id }}">
+        {{ staff.name }}
+        {% if not staff.active %}(Inactive){% endif %}
+      </option>
+    {% endfor %}
+  </select>
+</label>
+{% endmacro %}
+
+{% block body %}
+
+<p>Namaste, {{ u.name }}</p>
+
+<form method="post" action="/logout">
+  <input
+    type="hidden"
+    name="csrf"
+    value="{{ session.csrf }}"
+  >
+  <button type="submit">Logout</button>
+</form>
+
+<p class="notice">
+  Starter version: sirf test data use karein.
+  GST, automatic stock deduction aur full reports
+  abhi complete nahi hain.
+</p>
+
+{% if owner %}
+
+<nav>
+  <a href="#jobs">Naya Kaam</a>
+  <a href="#billing">Billing</a>
+  <a href="#customers">Customers</a>
+  <a href="#reports">Reports</a>
+  <a href="#staff">Staff</a>
+  <a href="#stock">Stock</a>
+</nav>
+
+<section id="reports">
+  <h2>Aaj ka Hisaab</h2>
+
+  <div class="grid">
+    <article>
+      Aaj ki Billing
+      <h3>₹{{ d.billing|inr }}</h3>
+    </article>
+
+    <article>
+      Aaj Paisa Mila
+      <h3>₹{{ d.collected|inr }}</h3>
+    </article>
+
+    <article>
+      Aaj ka Kharcha
+      <h3>₹{{ d.spent|inr }}</h3>
+    </article>
+
+    <article>
+      Customers se Lena Baaki
+      <h3>₹{{ d.due|inr }}</h3>
+    </article>
+  </div>
+
+  <p>
+    <small>
+      Billing aur paisa milna alag figures hain.
+      Aaj ki date server ke timezone par based hai.
+    </small>
+  </p>
+
+  <nav>
+    <a href="#jobs">Naya Kaam</a>
+    <a href="#billing">Bill Banao / Payment Lo</a>
+    <a href="#expenses">Kharcha Add Karo</a>
+  </nav>
+</section>
+
+<section id="customers">
+  <h2>Customers</h2>
+
+  {{ start_form('customer') }}
+
+    {{ field('name', 'Customer ka Naam') }}
+    {{ field('phone', 'Mobile Number', 'tel') }}
+
+    <label>
+      Address — optional
+      <textarea name="address"></textarea>
+    </label>
+
+    <button type="submit">Customer Add Karo</button>
+  </form>
+
+  <h3>Customer Search</h3>
+
+  <input
+    type="search"
+    placeholder="Naam, mobile ya gaadi number"
+    aria-label="Customer search"
+    oninput="
+      document.querySelectorAll('.customer-record')
+        .forEach(function (item) {
+          item.hidden = !item.textContent
+            .toLowerCase()
+            .includes(this.value.toLowerCase());
+        }, this);
+    "
+  >
+
+  {% for customer in d.customers %}
+    <article class="customer-record">
+      <h3>{{ customer.name }}</h3>
+      <p>Mobile: {{ customer.phone }}</p>
+
+      {% if customer.address %}
+        <p>{{ customer.address }}</p>
+      {% endif %}
+
+      {% for vehicle in d.vehicles
+          if vehicle.customer_id == customer.id %}
+        <p>
+          {{ vehicle.registration }} · {{ vehicle.model }}
+        </p>
+      {% endfor %}
+    </article>
+  {% else %}
+    <p>Abhi koi customer nahi hai.</p>
+  {% endfor %}
+
+  <h3>Customer ki Gaadi Add Karo</h3>
+
+  {{ start_form('vehicle') }}
+
+    <label>
+      Customer
+      <select name="customer_id" required>
+        <option value="">Customer chuno</opt
