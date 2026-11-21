@@ -2,287 +2,372 @@
 {% block body %}
 
 <style>
-  .garage {
-    line-height: 1.7;
-  }
+.garage {
+  line-height: 1.7;
+}
 
-  .garage .hero {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
+.garage .hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
 
-  .garage .hero h1 {
-    margin: 0 0 7px;
-  }
+.garage .hero h1 {
+  margin: 0 0 7px;
+}
 
-  .garage .hero p {
-    margin: 0;
-  }
+.garage .hero p {
+  margin: 0;
+}
 
-  .garage .eyebrow {
-    text-transform: uppercase;
-    margin-bottom: 9px;
-  }
+.garage .eyebrow {
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
 
-  .garage .muted {
-    font-size: 13px;
-  }
+.garage .muted {
+  font-size: 13px;
+}
 
-  .garage .app-tabs {
-    position: sticky;
-    top: 0;
-    z-index: 20;
-    display: flex;
-    gap: 8px;
-    overflow-x: auto;
-    padding: 15px 3px;
-    margin: 15px 0;
-    background: #f3f2eef5;
-    border-bottom: 1px solid #deded7;
-    scrollbar-width: thin;
-  }
+.garage .app-tabs {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 16px 3px;
+  margin: 15px 0;
+  background: #f3f2eef7;
+  border-bottom: 1px solid #deded7;
+  scrollbar-width: thin;
+}
 
+.garage .app-tabs button {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  padding: 11px 17px;
+  color: #242424 !important;
+  background: #ffffff !important;
+  border: 1px solid #deded7;
+  border-radius: 999px !important;
+  box-shadow: none !important;
+  font-size: 12px !important;
+}
+
+.garage .app-tabs button[aria-pressed="true"] {
+  background: #202020 !important;
+  color: #ffffff !important;
+  border-color: #202020;
+}
+
+.garage .panel {
+  scroll-margin-top: 90px;
+}
+
+.garage .section-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 15px;
+  padding-bottom: 18px;
+  margin-bottom: 20px;
+  border-bottom: 1px dashed #d7d7d0;
+}
+
+.garage .section-heading h2 {
+  margin: 0 0 8px;
+}
+
+.garage .section-heading p {
+  margin: 0;
+}
+
+.garage .section-index {
+  display: grid;
+  place-items: center;
+  flex: 0 0 42px;
+  height: 42px;
+  border: 1px solid #deded7;
+  border-radius: 50%;
+  color: #74746b;
+  font-size: 12px;
+  font-weight: 800;
+  background: #f8f8f4;
+}
+
+.garage label {
+  display: block;
+  font-weight: 700;
+  margin: 17px 0;
+}
+
+.garage input:not([type="hidden"]),
+.garage textarea {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.garage .submit {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.garage .results {
+  max-height: 280px;
+  overflow-y: auto;
+  padding: 3px;
+}
+
+.garage .choice {
+  display: block;
+  width: 100%;
+  margin: 8px 0;
+  text-align: left;
+}
+
+.garage .details {
+  padding: 17px;
+  margin: 18px 0;
+}
+
+.garage .details p {
+  margin: 6px 0;
+  overflow-wrap: anywhere;
+}
+
+.garage .phone-boxes {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  margin: 12px 0;
+}
+
+.garage .points-heading {
+  margin: 25px 0 12px;
+  font-weight: 800;
+}
+
+.garage .point-row {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) 38px;
+  gap: 9px;
+  align-items: start;
+  margin-bottom: 12px;
+}
+
+.garage .point-number {
+  display: grid;
+  place-items: center;
+  height: 36px;
+  margin-top: 9px;
+  color: #6a6a63;
+  background: #efefe9;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.garage .point-row textarea {
+  min-height: 64px;
+  margin: 0 !important;
+  resize: vertical;
+}
+
+.garage .point-row .remove-point {
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  margin-top: 8px;
+  background: #f5e9e9 !important;
+  color: #a12b2f !important;
+  box-shadow: none !important;
+  font-size: 20px !important;
+}
+
+.garage .secondary-button {
+  color: #242424 !important;
+  background: #efefe9 !important;
+  border: 1px solid #ddddd5;
+  box-shadow: none !important;
+}
+
+.garage .work-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  margin-top: 24px;
+}
+
+.garage .work-card {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.garage .card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+  font-size: 12px;
+}
+
+.garage .work-card h3 {
+  margin: 0 0 13px;
+}
+
+.garage .registration {
+  display: inline-block;
+}
+
+.garage .work-text {
+  margin-top: 18px;
+  padding-top: 15px;
+}
+
+.garage .work-text p {
+  white-space: pre-wrap;
+  margin-bottom: 0;
+}
+
+.garage .record {
+  margin-top: 14px;
+  overflow-wrap: anywhere;
+}
+
+.garage .record h3 {
+  margin: 0 0 7px;
+}
+
+.garage .record p {
+  margin: 5px 0;
+}
+
+.garage .empty {
+  padding: 25px 0;
+}
+
+.garage .footer-note {
+  text-align: center;
+  margin: 22px 0;
+  font-size: 12px;
+  color: #77776e;
+}
+
+.garage [hidden] {
+  display: none !important;
+}
+
+@media (max-width: 480px) {
   .garage .app-tabs button {
-    flex: 0 0 auto;
-    white-space: nowrap;
-    padding: 11px 16px;
-    background: #ffffff !important;
-    color: #292929 !important;
-    border: 1px solid #deded7;
-    border-radius: 999px !important;
-    box-shadow: none !important;
-  }
-
-  .garage .app-tabs button[aria-pressed="true"] {
-    background: #202020 !important;
-    color: #ffffff !important;
-    border-color: #202020;
-  }
-
-  .garage .panel {
-    scroll-margin-top: 85px;
-  }
-
-  .garage .panel h2 {
-    margin-top: 0;
-  }
-
-  .garage label {
-    display: block;
-    margin: 17px 0;
-    font-weight: 700;
-  }
-
-  .garage input:not([type="hidden"]),
-  .garage textarea {
-    display: block;
-    width: 100%;
-    margin-top: 8px;
-  }
-
-  .garage textarea {
-    min-height: 120px;
-  }
-
-  .garage .submit {
-    width: 100%;
-    margin-top: 12px;
-  }
-
-  .garage .results {
-    max-height: 280px;
-    overflow-y: auto;
-    padding: 3px;
-  }
-
-  .garage .choice {
-    display: block;
-    width: 100%;
-    text-align: left;
-    margin: 8px 0;
-  }
-
-  .garage .details {
-    padding: 16px;
-    margin: 17px 0;
-  }
-
-  .garage .details p {
-    margin: 5px 0;
-    overflow-wrap: anywhere;
-  }
-
-  .garage .phone-boxes {
-    display: grid;
-    grid-template-columns: repeat(10, minmax(0, 1fr));
-    margin: 10px 0;
+    padding: 10px 14px;
   }
 
   .garage .work-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    margin-top: 24px;
+    grid-template-columns: 1fr;
   }
 
-  .garage .work-card {
-    min-width: 0;
-    overflow-wrap: anywhere;
+  .garage .point-row {
+    grid-template-columns: 25px minmax(0, 1fr) 32px;
+    gap: 6px;
   }
 
-  .garage .card-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    font-size: 12px;
-    margin-bottom: 17px;
+  .garage .point-row .remove-point {
+    width: 32px;
+    height: 36px;
   }
 
-  .garage .work-card h3 {
-    margin: 0 0 12px;
+  .garage .section-index {
+    flex-basis: 36px;
+    height: 36px;
   }
-
-  .garage .registration {
-    display: inline-block;
-  }
-
-  .garage .work-text {
-    margin-top: 18px;
-    padding-top: 15px;
-  }
-
-  .garage .work-text p {
-    white-space: pre-wrap;
-    margin-bottom: 0;
-  }
-
-  .garage .record {
-    margin-top: 14px;
-    overflow-wrap: anywhere;
-  }
-
-  .garage .record h3 {
-    margin: 0 0 7px;
-  }
-
-  .garage .record p {
-    margin: 5px 0;
-  }
-
-  .garage .empty {
-    padding: 22px 0;
-  }
-
-  .garage .quick-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 9px;
-    margin: 16px 0;
-  }
-
-  .garage .quick-actions button {
-    background: #efefea !important;
-    color: #262626 !important;
-    box-shadow: none !important;
-  }
-
-  .garage [hidden] {
-    display: none !important;
-  }
-
-  @media (max-width: 480px) {
-    .garage .app-tabs button {
-      padding: 10px 14px;
-      font-size: 12px !important;
-    }
-
-    .garage .work-grid {
-      grid-template-columns: 1fr;
-    }
-  }
+}
 </style>
 
 <div class="garage">
 
 <header class="hero">
   <div>
-    <div class="eyebrow">Workshop workspace</div>
+    <div class="eyebrow">Workshop management</div>
     <h1>Babban Garage</h1>
-    <p>Namaste, {{ u.name }}</p>
+    <p>Welcome, {{ u.name }}</p>
   </div>
 
   <form method="post" action="/logout">
     <input type="hidden" name="csrf" value="{{ session.csrf }}">
-    <button class="logout" type="submit">Logout</button>
+    <button class="logout" type="submit">Log out</button>
   </form>
 </header>
 
 {% with messages = get_flashed_messages() %}
   {% for message in messages %}
-    <p class="notice" role="status">{{ message }}</p>
+    {% if message == 'Save ho gaya' %}
+      <p class="notice" role="status">Saved successfully.</p>
+    {% elif message.startswith('Save nahi hua:') %}
+      <p class="notice" role="alert">
+        Unable to save. Check the fields, duplicate records,
+        references and amounts.
+      </p>
+    {% else %}
+      <p class="notice" role="status">{{ message }}</p>
+    {% endif %}
   {% endfor %}
 {% endwith %}
 
 {% if owner %}
 
-<nav class="app-tabs" aria-label="Garage sections">
+<nav class="app-tabs" aria-label="Workspace navigation">
   <button type="button" data-view="new-work"
           aria-controls="new-work" aria-pressed="true">
-    नया Work
+    Work
   </button>
-
   <button type="button" data-view="new-customer"
           aria-controls="new-customer" aria-pressed="false">
-    नया Customer
+    New Customer
   </button>
-
   <button type="button" data-view="new-vehicle"
           aria-controls="new-vehicle" aria-pressed="false">
-    गाड़ी जोड़ो
+    Add Vehicle
   </button>
-
   <button type="button" data-view="work-list"
           aria-controls="work-list" aria-pressed="false">
     Work Cards
   </button>
-
   <button type="button" data-view="customer-list"
           aria-controls="customer-list" aria-pressed="false">
-    Customers
+    Customer Details
   </button>
 </nav>
 
 <section id="new-work" class="panel app-view">
-  <div class="eyebrow muted">New work</div>
-  <h2>Work क्या करवाना है?</h2>
-  <p class="muted">नाम या गाड़ी नंबर से खोजकर गाड़ी चुनो।</p>
-
-  <div class="quick-actions">
-    <button type="button" data-open="new-customer">
-      + नया Customer
-    </button>
-
-    <button type="button" data-open="new-vehicle">
-      + गाड़ी जोड़ो
-    </button>
+  <div class="section-heading">
+    <div>
+      <div class="eyebrow muted">Create a work card</div>
+      <h2>Work</h2>
+      <p class="muted">
+        Find a vehicle and add the required work point by point.
+      </p>
+    </div>
+    <span class="section-index" aria-hidden="true">01</span>
   </div>
 
   {% if d.vehicles %}
   <form id="work-form" method="post" action="/add/job"
         data-next="work-list">
-
     <input type="hidden" name="csrf" value="{{ session.csrf }}">
     <input id="work-id" type="hidden" name="vehicle_id">
+    <input id="work-description" type="hidden" name="problem">
 
     <label>
-      Customer का नाम या गाड़ी नंबर
+      Find customer or vehicle
       <input id="work-search" type="search"
-             placeholder="नाम, गाड़ी नंबर या मोबाइल..."
+             placeholder="Customer name, vehicle number or mobile"
              autocomplete="off">
     </label>
+
+    <p class="muted">Select the matching vehicle below.</p>
 
     <div id="work-results" class="results" hidden>
       {% for vehicle in d.vehicles %}
@@ -303,96 +388,109 @@
     </div>
 
     <p id="work-empty" class="muted" hidden>
-      कोई गाड़ी नहीं मिली। नाम/नंबर जाँचो या गाड़ी जोड़ो।
+      No matching vehicle found. Check the search or use Add Vehicle.
     </p>
 
     <div id="work-selected" class="details"
          aria-live="polite" hidden>
       <p>Customer: <span id="work-name"></span></p>
       <p>Mobile: <span id="work-phone"></span></p>
-      <p>गाड़ी: <span id="work-registration"></span></p>
+      <p>Vehicle: <span id="work-registration"></span></p>
       <p>Model: <span id="work-model"></span></p>
-      <p class="muted">Save करते समय आज की server date लगेगी।</p>
+      <p class="muted">
+        The server's current date will be added when saved.
+      </p>
     </div>
 
-    <label>
-      Work क्या करवाना है?
-      <textarea name="problem" rows="4"
-                placeholder="करवाने वाला काम लिखो..."
-                required></textarea>
-    </label>
+    <div class="points-heading">Work points</div>
+    <p class="muted">Write one task in each box.</p>
 
-    <button class="submit" type="submit">Work Card बनाओ</button>
+    <div id="work-points">
+      <div class="point-row">
+        <span class="point-number" aria-hidden="true">1</span>
+        <textarea class="work-point" rows="2"
+                  aria-label="Work point 1"
+                  placeholder="For example: Engine oil change"
+                  required></textarea>
+        <button type="button" class="remove-point"
+                aria-label="Remove work point 1" hidden>×</button>
+      </div>
+    </div>
+
+    <button id="add-point" class="secondary-button" type="button">
+      + Add Point
+    </button>
+
+    <button class="submit" type="submit">Create Work Card</button>
   </form>
   {% else %}
-    <p class="empty">पहले Customer और उसकी गाड़ी जोड़ो।</p>
+    <p class="empty">
+      Add a customer and vehicle first using the buttons above.
+    </p>
   {% endif %}
 </section>
 
 <section id="new-customer" class="panel app-view" hidden>
-  <div class="eyebrow muted">Customer details</div>
-  <h2>नया Customer जोड़ो</h2>
+  <div class="section-heading">
+    <div>
+      <div class="eyebrow muted">Customer information</div>
+      <h2>New Customer</h2>
+      <p class="muted">Add a name and a 10-digit mobile number.</p>
+    </div>
+    <span class="section-index" aria-hidden="true">02</span>
+  </div>
 
   <form id="customer-form" method="post" action="/add/customer"
         data-next="new-vehicle">
-
     <input type="hidden" name="csrf" value="{{ session.csrf }}">
     <input id="phone-value" type="hidden" name="phone">
 
     <label>
-      Customer का नाम
-      <input type="text" name="name"
-             autocomplete="name" required>
+      Customer name
+      <input type="text" name="name" autocomplete="name" required>
     </label>
 
-    <div id="phone-label">मोबाइल नंबर — 10 digits</div>
-
-    <div class="phone-boxes"
-         role="group" aria-labelledby="phone-label">
+    <div id="phone-label">Mobile number</div>
+    <div class="phone-boxes" role="group" aria-labelledby="phone-label">
       {% for i in range(10) %}
-      <input class="phone-digit"
-             type="text"
-             inputmode="numeric"
-             pattern="[0-9]"
-             maxlength="1"
+      <input class="phone-digit" type="text" inputmode="numeric"
+             pattern="[0-9]" maxlength="1"
              aria-label="Mobile digit {{ i + 1 }}"
-             autocomplete="off"
-             required>
+             autocomplete="off" required>
       {% endfor %}
     </div>
 
-    <p class="muted">पूरा 10-digit नंबर paste भी कर सकते हो।</p>
+    <p class="muted">Enter or paste a 10-digit mobile number.</p>
 
     <label>
       Address — optional
       <textarea name="address" rows="2"></textarea>
     </label>
 
-    <button class="submit" type="submit">Customer Save करो</button>
+    <button class="submit" type="submit">Save Customer</button>
   </form>
 </section>
 
 <section id="new-vehicle" class="panel app-view" hidden>
-  <div class="eyebrow muted">Vehicle details</div>
-  <h2>Customer की गाड़ी जोड़ो</h2>
-
-  <div class="quick-actions">
-    <button type="button" data-open="new-customer">
-      + नया Customer
-    </button>
+  <div class="section-heading">
+    <div>
+      <div class="eyebrow muted">Vehicle information</div>
+      <h2>Add Vehicle</h2>
+      <p class="muted">Search and select the vehicle owner first.</p>
+    </div>
+    <span class="section-index" aria-hidden="true">03</span>
   </div>
 
   {% if d.customers %}
   <form id="vehicle-form" method="post" action="/add/vehicle"
         data-next="new-work">
-
     <input type="hidden" name="csrf" value="{{ session.csrf }}">
     <input id="customer-id" type="hidden" name="customer_id">
 
     <label>
-      Customer search करो
+      Find customer
       <input id="customer-search" type="search"
-             placeholder="नाम या मोबाइल नंबर..."
+             placeholder="Customer name or mobile number"
              autocomplete="off">
     </label>
 
@@ -408,51 +506,54 @@
     </div>
 
     <p id="customer-empty" class="muted" hidden>
-      Customer नहीं मिला। नाम/मोबाइल जाँचो।
+      No matching customer found.
     </p>
 
     <div id="customer-selected" class="details"
          aria-live="polite" hidden>
-      <p>नाम: <span id="picked-name"></span></p>
+      <p>Customer: <span id="picked-name"></span></p>
       <p>Mobile: <span id="picked-phone"></span></p>
     </div>
 
     <label>
-      गाड़ी नंबर
-      <input type="text" name="registration" required>
+      Vehicle number
+      <input type="text" name="registration"
+             placeholder="Registration number" required>
     </label>
 
     <label>
-      गाड़ी का Model
-      <input type="text" name="model" required>
+      Vehicle model
+      <input type="text" name="model"
+             placeholder="Model name" required>
     </label>
 
-    <button class="submit" type="submit">गाड़ी Save करो</button>
+    <button class="submit" type="submit">Save Vehicle</button>
   </form>
   {% else %}
-    <p>पहले नया Customer जोड़ो।</p>
+    <p class="empty">Add a customer in New Customer first.</p>
   {% endif %}
 </section>
 
 {% else %}
-
-<p class="notice">
-  नीचे तुम्हें assign किए हुए Work Cards हैं।
-</p>
-
+<p class="notice">Your assigned work cards are shown below.</p>
 {% endif %}
 
 <section id="work-list"
          class="panel {% if owner %}app-view{% endif %}"
          {% if owner %}hidden{% endif %}>
-
-  <div class="eyebrow muted">Workshop work</div>
-  <h2>Work Cards</h2>
+  <div class="section-heading">
+    <div>
+      <div class="eyebrow muted">Workshop records</div>
+      <h2>Work Cards</h2>
+      <p class="muted">Find saved work by customer, vehicle or task.</p>
+    </div>
+    <span class="section-index" aria-hidden="true">04</span>
+  </div>
 
   <label>
-    Work search करो
+    Search work cards
     <input id="work-list-search" type="search"
-           placeholder="नाम, गाड़ी नंबर या काम...">
+           placeholder="Name, vehicle number or work">
   </label>
 
   <div class="work-grid">
@@ -478,35 +579,40 @@
       <span class="registration">{{ job.registration }}</span>
 
       <div class="work-text">
-        <div class="eyebrow muted">Work क्या करवाना है?</div>
+        <div class="eyebrow muted">Work</div>
         <p>{{ job.problem }}</p>
       </div>
     </article>
     {% else %}
-      <p class="empty">अभी कोई Work Card नहीं है।</p>
+      <p class="empty">No work cards yet.</p>
     {% endfor %}
   </div>
 </section>
 
 {% if owner %}
-
 <section id="customer-list" class="panel app-view" hidden>
-  <div class="eyebrow muted">Your customers</div>
-  <h2>Customers और गाड़ियाँ</h2>
+  <div class="section-heading">
+    <div>
+      <div class="eyebrow muted">Customer records</div>
+      <h2>Customer Details</h2>
+      <p class="muted">Customer contact information and vehicles.</p>
+    </div>
+    <span class="section-index" aria-hidden="true">05</span>
+  </div>
 
   <label>
-    Search करो
+    Search customers
     <input id="customer-list-search" type="search"
-           placeholder="नाम, मोबाइल या गाड़ी नंबर...">
+           placeholder="Name, mobile or vehicle number">
   </label>
 
   {% for customer in d.customers %}
   <article class="record">
     <h3>{{ customer.name }}</h3>
-    <p>{{ customer.phone }}</p>
+    <p>Mobile: {{ customer.phone }}</p>
 
     {% if customer.address %}
-      <p>{{ customer.address }}</p>
+      <p>Address: {{ customer.address }}</p>
     {% endif %}
 
     <ul>
@@ -518,14 +624,13 @@
     </ul>
   </article>
   {% else %}
-    <p class="empty">अभी कोई Customer नहीं है।</p>
+    <p class="empty">No customers yet.</p>
   {% endfor %}
 </section>
-
 {% endif %}
 
-<p class="muted">
-  Test version: अभी test data इस्तेमाल करें।
+<p class="footer-note">
+  Babban Garage · Test version · Use test data only
 </p>
 
 </div>
@@ -542,10 +647,7 @@
 
   function showView(view, scroll) {
     var target = document.getElementById(view);
-
-    if (!target || !target.classList.contains("app-view")) {
-      return;
-    }
+    if (!target || !target.classList.contains("app-view")) return;
 
     document.querySelectorAll(".app-view").forEach(function (panel) {
       panel.hidden = panel.id !== view;
@@ -561,22 +663,15 @@
     remember(view);
 
     if (scroll) {
-      target.scrollIntoView({
-        block: "start",
-        behavior: "auto"
-      });
+      target.scrollIntoView({block: "start", behavior: "auto"});
     }
   }
 
-  document.querySelectorAll("[data-view], [data-open]")
-    .forEach(function (button) {
-      button.addEventListener("click", function () {
-        showView(
-          button.dataset.view || button.dataset.open,
-          true
-        );
-      });
+  document.querySelectorAll("[data-view]").forEach(function (button) {
+    button.addEventListener("click", function () {
+      showView(button.dataset.view, true);
     });
+  });
 
   var initialView = "new-work";
 
@@ -596,7 +691,6 @@
 
     input.addEventListener("input", function () {
       var query = norm(input.value);
-
       document.querySelectorAll(selector).forEach(function (item) {
         item.hidden = !norm(item.textContent).includes(query);
       });
@@ -625,12 +719,8 @@
       buttons.forEach(function (button) {
         var match = query !== "" &&
           norm(button.textContent).includes(query);
-
         button.hidden = !match;
-
-        if (match) {
-          count++;
-        }
+        if (match) count++;
       });
 
       results.hidden = query === "" || count === 0;
@@ -640,7 +730,6 @@
     buttons.forEach(function (button) {
       button.addEventListener("click", function () {
         id.value = button.dataset.id;
-
         input.value = button.textContent
           .split(/s+/).join(" ").trim();
 
@@ -678,11 +767,8 @@
     empty: "customer-empty",
     selected: "customer-selected",
     choices: ".customer-choice",
-    fields: {
-      name: "picked-name",
-      phone: "picked-phone"
-    },
-    error: "Customer search करके सही Customer पर tap करो।"
+    fields: {name: "picked-name", phone: "picked-phone"},
+    error: "Search and select a customer first."
   });
 
   picker({
@@ -699,16 +785,100 @@
       registration: "work-registration",
       model: "work-model"
     },
-    error: "Search करके सही गाड़ी पर tap करो।"
+    error: "Search and select a vehicle first."
   });
+
+  var workForm = document.getElementById("work-form");
+
+  if (workForm) {
+    var points = document.getElementById("work-points");
+
+    function renumber() {
+      var rows = points.querySelectorAll(".point-row");
+
+      rows.forEach(function (row, index) {
+        row.querySelector(".point-number").textContent = index + 1;
+        row.querySelector("textarea").setAttribute(
+          "aria-label", "Work point " + (index + 1)
+        );
+
+        var remove = row.querySelector(".remove-point");
+        remove.hidden = rows.length === 1;
+        remove.setAttribute(
+          "aria-label", "Remove work point " + (index + 1)
+        );
+      });
+    }
+
+    document.getElementById("add-point").addEventListener("click", function () {
+      var row = document.createElement("div");
+      row.className = "point-row";
+
+      var number = document.createElement("span");
+      number.className = "point-number";
+      number.setAttribute("aria-hidden", "true");
+
+      var input = document.createElement("textarea");
+      input.className = "work-point";
+      input.rows = 2;
+      input.required = true;
+      input.placeholder = "Enter another work point";
+
+      var remove = document.createElement("button");
+      remove.type = "button";
+      remove.className = "remove-point";
+      remove.textContent = "×";
+
+      row.appendChild(number);
+      row.appendChild(input);
+      row.appendChild(remove);
+      points.appendChild(row);
+
+      renumber();
+      input.focus();
+    });
+
+    points.addEventListener("click", function (event) {
+      var remove = event.target.closest(".remove-point");
+      if (!remove || points.children.length <= 1) return;
+
+      remove.closest(".point-row").remove();
+      renumber();
+    });
+
+    points.addEventListener("input", function (event) {
+      if (event.target.classList.contains("work-point")) {
+        event.target.setCustomValidity("");
+      }
+    });
+
+    workForm.addEventListener("submit", function (event) {
+      var inputs = Array.from(points.querySelectorAll(".work-point"));
+
+      var blank = inputs.find(function (input) {
+        return !input.value.trim();
+      });
+
+      if (blank) {
+        event.preventDefault();
+        blank.setCustomValidity("Enter a work point or remove this box.");
+        blank.reportValidity();
+        blank.focus();
+        return;
+      }
+
+      document.getElementById("work-description").value =
+        inputs.map(function (input, index) {
+          return (index + 1) + ". " + input.value.trim();
+        }).join("
+");
+    });
+  }
 
   var customerForm = document.getElementById("customer-form");
 
   if (customerForm) {
-    var digits = Array.from(
-      document.querySelectorAll(".phone-digit")
-    );
-
+    var digits = Array.from(document.querySelectorAll(".phone-digit"));
     var phone = document.getElementById("phone-value");
 
     function syncPhone() {
@@ -719,14 +889,9 @@
 
     digits.forEach(function (box, index) {
       box.addEventListener("input", function () {
-        box.value = box.value
-          .replace(/[^0-9]/g, "").slice(-1);
-
+        box.value = box.value.replace(/[^0-9]/g, "").slice(-1);
         syncPhone();
-
-        if (box.value && index < 9) {
-          digits[index + 1].focus();
-        }
+        if (box.value && index < 9) digits[index + 1].focus();
       });
 
       box.addEventListener("focus", function () {
@@ -734,19 +899,13 @@
       });
 
       box.addEventListener("keydown", function (event) {
-        if (
-          event.key === "Backspace" &&
-          !box.value &&
-          index > 0
-        ) {
+        if (event.key === "Backspace" && !box.value && index > 0) {
           digits[index - 1].focus();
         }
-
         if (event.key === "ArrowLeft" && index > 0) {
           event.preventDefault();
           digits[index - 1].focus();
         }
-
         if (event.key === "ArrowRight" && index < 9) {
           event.preventDefault();
           digits[index + 1].focus();
@@ -756,8 +915,7 @@
       box.addEventListener("paste", function (event) {
         event.preventDefault();
 
-        var text = event.clipboardData
-          .getData("text")
+        var text = event.clipboardData.getData("text")
           .replace(/[^0-9]/g, "");
 
         var start = text.length >= 10 ? 0 : index;
@@ -783,19 +941,18 @@
         });
 
         (missing || digits[0]).focus();
-        alert("मोबाइल नंबर के पूरे 10 digits भरो।");
+        alert("Enter all 10 digits of the mobile number.");
       }
     });
   }
 
-  document.querySelectorAll("form[data-next]")
-    .forEach(function (form) {
-      form.addEventListener("submit", function (event) {
-        if (!event.defaultPrevented) {
-          remember(form.dataset.next);
-        }
-      });
+  document.querySelectorAll("form[data-next]").forEach(function (form) {
+    form.addEventListener("submit", function (event) {
+      if (!event.defaultPrevented) {
+        remember(form.dataset.next);
+      }
     });
+  });
 })();
 </script>
 
