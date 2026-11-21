@@ -27,6 +27,7 @@
 <nav>
   <a href="#reports">Aaj ka Hisaab</a>
   <a href="#customers">Customers</a>
+  <a href="#vehicles">Gaadi Add Karo</a>
 </nav>
 
 <section id="reports">
@@ -63,9 +64,7 @@
 </section>
 
 <section id="customers">
-  <h2>Customers</h2>
-
-  <h3>Naya Customer Add Karo</h3>
+  <h2>Naya Customer Add Karo</h2>
 
   <form method="post" action="/add/customer">
     <input
@@ -76,20 +75,12 @@
 
     <label>
       Customer ka Naam
-      <input
-        type="text"
-        name="name"
-        required
-      >
+      <input type="text" name="name" required>
     </label>
 
     <label>
       Mobile Number
-      <input
-        type="tel"
-        name="phone"
-        required
-      >
+      <input type="tel" name="phone" required>
     </label>
 
     <label>
@@ -99,51 +90,97 @@
 
     <button type="submit">Customer Add Karo</button>
   </form>
+</section>
 
-  <h3>Customer Search</h3>
+<section id="vehicles">
+  <h2>Customer ki Gaadi Add Karo</h2>
 
-  <input
-    id="customer-search"
-    type="search"
-    placeholder="Naam, mobile ya gaadi number"
-    aria-label="Customer search"
-  >
+  <form method="post" action="/add/vehicle">
+    <input
+      type="hidden"
+      name="csrf"
+      value="{{ session.csrf }}"
+    >
 
-  <div id="customer-list">
-    {% for customer in d.customers %}
+    <label>
+      Customer chuno
+      <select name="customer_id" required>
+        <option value="">Customer select karo</option>
 
-      <article class="customer-record">
-        <h3>{{ customer.name }}</h3>
-        <p>Mobile: {{ customer.phone }}</p>
+        {% for customer in d.customers %}
+          <option value="{{ customer.id }}">
+            {{ customer.name }} — {{ customer.phone }}
+          </option>
+        {% endfor %}
+      </select>
+    </label>
 
-        {% if customer.address %}
-          <p>Address: {{ customer.address }}</p>
-        {% endif %}
+    <label>
+      Gaadi ka Registration Number
+      <input
+        type="text"
+        name="registration"
+        placeholder="TEST0001"
+        required
+      >
+    </label>
 
+    <label>
+      Gaadi ka Model
+      <input
+        type="text"
+        name="model"
+        placeholder="Test Bike"
+        required
+      >
+    </label>
+
+    <button type="submit">Gaadi Add Karo</button>
+  </form>
+</section>
+
+<section>
+  <h2>Customers aur Unki Gaadiyan</h2>
+
+  <label>
+    Customer Search
+    <input
+      id="customer-search"
+      type="search"
+      placeholder="Naam, mobile ya gaadi number"
+    >
+  </label>
+
+  {% for customer in d.customers %}
+    <article class="customer-record">
+      <h3>{{ customer.name }}</h3>
+      <p>Mobile: {{ customer.phone }}</p>
+
+      {% if customer.address %}
+        <p>Address: {{ customer.address }}</p>
+      {% endif %}
+
+      <ul>
         {% for vehicle in d.vehicles %}
           {% if vehicle.customer_id == customer.id %}
-            <p>
-              Gaadi: {{ vehicle.registration }}
-              · {{ vehicle.model }}
-            </p>
+            <li>
+              {{ vehicle.registration }}
+              — {{ vehicle.model }}
+            </li>
           {% endif %}
         {% endfor %}
-      </article>
-
-    {% else %}
-
-      <p>Abhi koi customer nahi hai.</p>
-
-    {% endfor %}
-  </div>
+      </ul>
+    </article>
+  {% else %}
+    <p>Abhi koi customer nahi hai.</p>
+  {% endfor %}
 </section>
 
 <section>
   <h2>Baaki Features</h2>
   <p>
-    Gaadi add karna, jobs, billing, payment,
-    kharcha, staff management aur stock ke forms
-    abhi is page mein shamil nahi hain.
+    Jobs, billing, payment, kharcha, staff management
+    aur stock ke forms abhi is page mein shamil nahi hain.
   </p>
 </section>
 
@@ -160,8 +197,9 @@
       var records = document.querySelectorAll(".customer-record");
 
       records.forEach(function (record) {
-        var text = record.textContent.toLowerCase();
-        record.hidden = !text.includes(query);
+        record.hidden = !record.textContent
+          .toLowerCase()
+          .includes(query);
       });
     });
   })();
@@ -173,8 +211,8 @@
   <h2>Staff Dashboard</h2>
   <p>Namaste, {{ u.name }}.</p>
   <p>
-    Staff ke kaam wale features abhi is page
-    mein shamil nahi hain.
+    Staff ke kaam wale features abhi is page mein
+    shamil nahi hain.
   </p>
 </section>
 
