@@ -1,56 +1,20 @@
 {% extends 'base.html' %}
 
-{% macro start_form(path) %}
-<form method="post" action="/add/{{ path }}">
-  <input
-    type="hidden"
-    name="csrf"
-    value="{{ session.csrf }}"
-  >
-{% endmacro %}
-
-{% macro field(name, label, type='text') %}
-<label>
-  {{ label }}
-  <input
-    name="{{ name }}"
-    type="{{ type }}"
-    required
-    {% if type == 'number' %}
-      min="0.01"
-      step="0.01"
-    {% endif %}
-  >
-</label>
-{% endmacro %}
-
-{% macro staff_select() %}
-<label>
-  Staff chuno
-  <select name="user_id" required>
-    <option value="">Staff select karo</option>
-    {% for staff in d.users if staff.role == 'staff' %}
-      <option value="{{ staff.id }}">
-        {{ staff.name }}
-        {% if not staff.active %}(Inactive){% endif %}
-      </option>
-    {% endfor %}
-  </select>
-</label>
-{% endmacro %}
-
 {% block body %}
 
-<p>Namaste, {{ u.name }}</p>
+<header>
+  <h1>Babban Garage</h1>
+  <p>Namaste, {{ u.name }}</p>
 
-<form method="post" action="/logout">
-  <input
-    type="hidden"
-    name="csrf"
-    value="{{ session.csrf }}"
-  >
-  <button type="submit">Logout</button>
-</form>
+  <form method="post" action="/logout">
+    <input
+      type="hidden"
+      name="csrf"
+      value="{{ session.csrf }}"
+    >
+    <button type="submit">Logout</button>
+  </form>
+</header>
 
 <p class="notice">
   Starter version: sirf test data use karein.
@@ -61,12 +25,8 @@
 {% if owner %}
 
 <nav>
-  <a href="#jobs">Naya Kaam</a>
-  <a href="#billing">Billing</a>
+  <a href="#reports">Aaj ka Hisaab</a>
   <a href="#customers">Customers</a>
-  <a href="#reports">Reports</a>
-  <a href="#staff">Staff</a>
-  <a href="#stock">Stock</a>
 </nav>
 
 <section id="reports">
@@ -74,22 +34,22 @@
 
   <div class="grid">
     <article>
-      Aaj ki Billing
+      <p>Aaj ki Billing</p>
       <h3>₹{{ d.billing|inr }}</h3>
     </article>
 
     <article>
-      Aaj Paisa Mila
+      <p>Aaj Paisa Mila</p>
       <h3>₹{{ d.collected|inr }}</h3>
     </article>
 
     <article>
-      Aaj ka Kharcha
+      <p>Aaj ka Kharcha</p>
       <h3>₹{{ d.spent|inr }}</h3>
     </article>
 
     <article>
-      Customers se Lena Baaki
+      <p>Customers se Lena Baaki</p>
       <h3>₹{{ d.due|inr }}</h3>
     </article>
   </div>
@@ -100,21 +60,37 @@
       Aaj ki date server ke timezone par based hai.
     </small>
   </p>
-
-  <nav>
-    <a href="#jobs">Naya Kaam</a>
-    <a href="#billing">Bill Banao / Payment Lo</a>
-    <a href="#expenses">Kharcha Add Karo</a>
-  </nav>
 </section>
 
 <section id="customers">
   <h2>Customers</h2>
 
-  {{ start_form('customer') }}
+  <h3>Naya Customer Add Karo</h3>
 
-    {{ field('name', 'Customer ka Naam') }}
-    {{ field('phone', 'Mobile Number', 'tel') }}
+  <form method="post" action="/add/customer">
+    <input
+      type="hidden"
+      name="csrf"
+      value="{{ session.csrf }}"
+    >
+
+    <label>
+      Customer ka Naam
+      <input
+        type="text"
+        name="name"
+        required
+      >
+    </label>
+
+    <label>
+      Mobile Number
+      <input
+        type="tel"
+        name="phone"
+        required
+      >
+    </label>
 
     <label>
       Address — optional
@@ -127,44 +103,81 @@
   <h3>Customer Search</h3>
 
   <input
+    id="customer-search"
     type="search"
     placeholder="Naam, mobile ya gaadi number"
     aria-label="Customer search"
-    oninput="
-      document.querySelectorAll('.customer-record')
-        .forEach(function (item) {
-          item.hidden = !item.textContent
-            .toLowerCase()
-            .includes(this.value.toLowerCase());
-        }, this);
-    "
   >
 
-  {% for customer in d.customers %}
-    <article class="customer-record">
-      <h3>{{ customer.name }}</h3>
-      <p>Mobile: {{ customer.phone }}</p>
+  <div id="customer-list">
+    {% for customer in d.customers %}
 
-      {% if customer.address %}
-        <p>{{ customer.address }}</p>
-      {% endif %}
+      <article class="customer-record">
+        <h3>{{ customer.name }}</h3>
+        <p>Mobile: {{ customer.phone }}</p>
 
-      {% for vehicle in d.vehicles
-          if vehicle.customer_id == customer.id %}
-        <p>
-          {{ vehicle.registration }} · {{ vehicle.model }}
-        </p>
-      {% endfor %}
-    </article>
-  {% else %}
-    <p>Abhi koi customer nahi hai.</p>
-  {% endfor %}
+        {% if customer.address %}
+          <p>Address: {{ customer.address }}</p>
+        {% endif %}
 
-  <h3>Customer ki Gaadi Add Karo</h3>
+        {% for vehicle in d.vehicles %}
+          {% if vehicle.customer_id == customer.id %}
+            <p>
+              Gaadi: {{ vehicle.registration }}
+              · {{ vehicle.model }}
+            </p>
+          {% endif %}
+        {% endfor %}
+      </article>
 
-  {{ start_form('vehicle') }}
+    {% else %}
 
-    <label>
-      Customer
-      <select name="customer_id" required>
-        <option value="">Customer chuno</opt
+      <p>Abhi koi customer nahi hai.</p>
+
+    {% endfor %}
+  </div>
+</section>
+
+<section>
+  <h2>Baaki Features</h2>
+  <p>
+    Gaadi add karna, jobs, billing, payment,
+    kharcha, staff management aur stock ke forms
+    abhi is page mein shamil nahi hain.
+  </p>
+</section>
+
+<script>
+  (function () {
+    var search = document.getElementById("customer-search");
+
+    if (!search) {
+      return;
+    }
+
+    search.addEventListener("input", function () {
+      var query = search.value.toLowerCase().trim();
+      var records = document.querySelectorAll(".customer-record");
+
+      records.forEach(function (record) {
+        var text = record.textContent.toLowerCase();
+        record.hidden = !text.includes(query);
+      });
+    });
+  })();
+</script>
+
+{% else %}
+
+<section>
+  <h2>Staff Dashboard</h2>
+  <p>Namaste, {{ u.name }}.</p>
+  <p>
+    Staff ke kaam wale features abhi is page
+    mein shamil nahi hain.
+  </p>
+</section>
+
+{% endif %}
+
+{% endblock %}
